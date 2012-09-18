@@ -48,15 +48,16 @@ char** load_board(char *filename)
 		j = 0;
 		while ( fgets ( line, sizeof line, FPboard ) != NULL )
 		{
+			//printf("line %d: %s", sizeof line, line); 
 			for( i = 0; i < BOARD_WIDTH; ++i )
 			{
-				if(line[i] != NULL)
+				if(line[i] != NULL && (int)line[i] != 10 )
 				{
 					new_board[i][j] = line[i];
 				}
 				else
 				{
-					new_board[i][j] = " ";
+					new_board[i][j] = ' ';
 				}
 			}
 			++j; // make sure to increment the height
@@ -89,6 +90,7 @@ void print_board(char **board)
 		{
 			printf("%c", board[i][j]);
 		}
+		//printf("\n");
 	}
 }
 
