@@ -5,6 +5,13 @@
 #define BOARD_WIDTH 80
 #define BOARD_HEIGHT 24
 
+#define UP 72 // ascii code for UP ARROW
+#define DOWN 80 // ascii code for DOWN ARROW
+#define RIGHT 77 // ascii code for RIGHT ARROW
+#define LEFT 75 // ascii code for LEFT ARROW
+#define ENTER 13 // ascii code for ENTER key
+#define SPACEBAR 32 // ascii code for SPACE BAR key
+
 
 char **create_board(void) 
 {
@@ -77,10 +84,6 @@ char** load_board(char *filename)
 	return new_board;
 }
 
-void add_line(char line[BOARD_WIDTH], char **board) 
-{
-	
-}
 void print_board(char **board) 
 {
 	int i, j;
@@ -90,14 +93,67 @@ void print_board(char **board)
 		{
 			printf("%c", board[i][j]);
 		}
-		//printf("\n");
 	}
 }
 
 int main(int argc, char *argv[]) {
 	char *filename = "board.txt";
 	char **board = load_board(filename);
+	char key_pressed = '\0';
 	print_board(board);
+	//Process arrow key's, enter and spacebar input.
+	//ENTER will escape the input loop.
+	while(key_pressed != ENTER)
+	{
+		if(_kbhit())
+		{
+			system("cls");
+			print_board(board);
+			key_pressed = _getch();
+			//arrow keys and special keys like home, end, page up, page down, etc have
+			//an ascii character of alpha or -32 that gets caught in the _getch() buffer.
+			//This if statement catches that and then the switch figures out what arrow
+			//key was pressed.
+			if(key_pressed == -32){
+				key_pressed = _getch();
+				switch(key_pressed)
+				{
+				case DOWN :
+					printf("down\n");
+					break;
+				case UP :
+					printf("up\n");
+					break;
+				case LEFT :
+					printf("left\n");
+					break;
+				case RIGHT :
+					printf("right\n");
+					break;
+				default:
+					printf("no input option for this key\n");
+					break;
+				}
+			}
+			else
+			{
+				//In all other non-special key cases we just process the standard singlely
+				//return ascii value from _getch()
+				switch(key_pressed)
+				{
+				case ENTER:
+					printf("enter\n");
+					break;
+				case SPACEBAR:
+					printf("spacebar\n");
+					break;
+				default:
+					printf("no input option for this key\n");
+					break;
+				}
+			}
+		}
+	}
+	
 	return 0;
 }
-
